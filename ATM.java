@@ -11,14 +11,13 @@ class ATM {
     this.cards = cards;
   }
 
-  String checkCardNum(String cardNum) {
+  void checkCardNum(String cardNum) throws Error {
     if (cardNum.length() != 6 || !checkIfCardNumExists(cardNum)) {
       error = true;
-      return "Mistake in the card number.";
+      throw new Error("Wrong card number");
     }
 
-    return "Checked the card number.";
-  }
+ }
 
   boolean checkIfCardNumExists(String cardNum) {
 
@@ -31,31 +30,39 @@ class ATM {
     return false;
   }
 
-  boolean checkIfSecurityCodeIsCorrect(String cardNum, String securityCode) {
+  void checkIfSecurityCodeIsCorrect(String cardNum, String securityCode) throws Error {
+    
+    boolean found = false;
 
     for (int i = 0; i < cards.size(); i++) {
       if (cards.get(i).getSecurityCode().equals(securityCode) && cards.get(i).getCardNum().equals(cardNum)) {
         currentCard = i;
-        return true;
+        found = true;
+        break;
       }
     }
 
-    return false;
+    if (!found) throw new Error("Wrong security code."); 
   }
 
-  String cashOut(int cashExtractAmount) {
+  void cashOut(int cashExtractAmount) throws Error {
     if (error) {
-      return "Error";
+      throw new Error("Error occured.");
     }
 
-    balance = balance - cashExtractAmount;
-    int cardBalance = cards.get(currentCard).getBalance() - cashExtractAmount;
+    int cardBalance = getCardBalance();
 
     if (cashExtractAmount > balance || cashExtractAmount > cardBalance) {
-      System.out.println("Not enough balance.");
+      throw new Error("Not enough balance.");
     }
 
-    System.out.printf("You've extracted %s \n Your balance is %s", cashExtractAmount, cardBalance);
-    return "Successfull.";
+    int newCardBalance = cardBalance - cashExtractAmount;
+    balance = balance - cashExtractAmount;
+
+    System.out.printf("You've extracted %s \n Your balance is %s", cashExtractAmount, newCardBalance);
+  }
+
+  int getCardBalance() {
+    return cards.get(currentCard).getBalance();
   }
 }

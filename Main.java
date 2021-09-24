@@ -43,17 +43,24 @@ class Main {
     
     System.out.println("Enter your card number: ");
     String cardNumInput = scanner.nextLine();
-
-    System.out.println(atm.checkCardNum(cardNumInput));
     
-    System.out.println("Enter the security code: ");
-    String securityCodeInput = scanner.nextLine();
+    try {
+      atm.checkCardNum(cardNumInput);
 
-    System.out.println(atm.checkIfSecurityCodeIsCorrect(cardNumInput, securityCodeInput));
+      System.out.println("Enter the security code: ");
+      String securityCodeInput = scanner.nextLine();
 
-    System.out.println("Enter the amount of money to extract: ");
-    int cashExtractAmount = scanner.nextInt();
+      atm.checkIfSecurityCodeIsCorrect(cardNumInput, securityCodeInput);
 
-    atm.cashOut(cashExtractAmount);
+      System.out.println("Your balance is " + atm.getCardBalance());
+
+      System.out.println("Enter the amount of money to extract: ");
+      int cashExtractAmount = scanner.nextInt();
+
+      atm.cashOut(cashExtractAmount);
+    } catch(Error e) {
+        System.out.println(e.getMessage());
+    }
+  
   }
 }
